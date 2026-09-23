@@ -7,12 +7,14 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+
 import {
   IsEmail,
   IsNotEmpty,
   IsString,
   MinLength,
 } from 'class-validator';
+
 import type { Response } from 'express';
 
 import { AuthService } from './auth.service';
@@ -75,6 +77,20 @@ export class AuthController {
     return {
       message: 'Login successful',
       user: result.user,
+    };
+  }
+
+  // Logout
+  @Post('logout')
+  logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('access_token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+
+    return {
+      message: 'Logout successful',
     };
   }
 
