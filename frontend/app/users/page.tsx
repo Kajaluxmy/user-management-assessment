@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -25,40 +26,46 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  async function loadUsers() {
-    try {
-      setError('');
-
-      await getCurrentUser();
-
-      const data = await getUsers();
-
-      setUsers(data as User[]);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('Unable to load users.');
-      }
-
-      router.push('/login');
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
+    async function loadUsers() {
+      try {
+        setError('');
+
+        await getCurrentUser();
+
+        const data = await getUsers();
+
+        setUsers(data as User[]);
+      } catch (error: unknown) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Unable to load users.';
+
+        setError(message);
+
+        router.push('/login');
+      } finally {
+        setLoading(false);
+      }
+    }
+
     loadUsers();
-  }, []);
+  }, [router]);
 
   return (
     <main className="min-h-screen bg-slate-50">
       <Navbar />
 
-      <div className="mx-auto max-w-6xl px-6 py-8">
-        <div className="mb-8">
-          <div className="mb-2 flex items-center gap-2">
-            <Users className="h-5 w-5 text-slate-500" />
+      <div className="mx-auto max-w-6xl px-6 py-10">
+        <section className="mb-8">
+          <div className="mb-3 flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900">
+              <Users
+                className="h-4 w-4 text-white"
+                aria-hidden="true"
+              />
+            </div>
 
             <span className="text-sm font-medium text-slate-500">
               User Management
@@ -69,19 +76,22 @@ export default function UsersPage() {
             Users
           </h1>
 
-          <p className="mt-1 text-sm text-slate-500">
-            View all registered users.
+          <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+            View registered users and access their profile information.
           </p>
-        </div>
+        </section>
 
         {error && (
-          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div
+            role="alert"
+            className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
             {error}
           </div>
         )}
 
         {loading ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+          <section className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
             <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-slate-900" />
 
             <p className="text-sm font-medium text-slate-700">
@@ -89,36 +99,48 @@ export default function UsersPage() {
             </p>
 
             <p className="mt-1 text-xs text-slate-400">
-              Please wait while we fetch the users.
+              Please wait while we fetch the registered users.
             </p>
-          </div>
+          </section>
         ) : users.length === 0 ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+          <section className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
-              <Users className="h-5 w-5 text-slate-500" />
+              <Users
+                className="h-5 w-5 text-slate-500"
+                aria-hidden="true"
+              />
             </div>
 
             <h2 className="text-lg font-semibold text-slate-900">
               No users found
             </h2>
 
-            <p className="mt-1 text-sm text-slate-500">
-              There are no registered users yet.
+            <p className="mx-auto mt-1 max-w-sm text-sm text-slate-500">
+              There are currently no registered users in the system.
             </p>
-          </div>
+          </section>
         ) : (
-          <div>
+          <section>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm text-slate-500">
-                {users.length}{' '}
-                {users.length === 1 ? 'user' : 'users'} registered
-              </p>
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900">
+                  Registered Users
+                </h2>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  {users.length}{' '}
+                  {users.length === 1 ? 'user' : 'users'} registered
+                </p>
+              </div>
             </div>
 
-            <UserTable users={users} />
-          </div>
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <UserTable users={users} />
+            </div>
+          </section>
         )}
       </div>
     </main>
   );
 }
+
