@@ -1,7 +1,22 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator';
 import type { Response } from 'express';
+
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 class RegisterDto {
   @IsString()
@@ -27,7 +42,9 @@ class LoginDto {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+  ) {}
 
   @Post('register')
   register(@Body() body: RegisterDto) {
@@ -59,5 +76,13 @@ export class AuthController {
       message: 'Login successful',
       user: result.user,
     };
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async me(@Req() request: any) {
+    return this.authService.getCurrentUser(
+      request.user.userId,
+    );
   }
 }
