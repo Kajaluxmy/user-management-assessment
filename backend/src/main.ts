@@ -7,10 +7,15 @@ async function bootstrap() {
 
 app.use(cookieParser());
 
-app.enableCors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true,
-});
+  const frontendUrl = process.env.FRONTEND_URL;
+  const allowedOrigins = frontendUrl
+    ? frontendUrl.split(',').map((url) => url.trim().replace(/\/$/, ''))
+    : ['http://localhost:3000'];
+
+  app.enableCors({
+    origin: allowedOrigins,
+    credentials: true,
+  });
 
 app.useGlobalPipes(
   new ValidationPipe({
@@ -20,7 +25,8 @@ app.useGlobalPipes(
   }),
 );
 
-  await app.listen(process.env.PORT || 5000);
+  const port = process.env.PORT || 5000;
+  await app.listen(port, '0.0.0.0');
 }
 
 bootstrap();
