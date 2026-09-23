@@ -1,5 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import type { Response } from 'express';
 import { AuthService } from './auth.service';
 
 class RegisterDto {
@@ -38,10 +39,25 @@ export class AuthController {
   }
 
   @Post('login')
-login(@Body() body: LoginDto) {
-  return this.authService.login(
-    body.email,
-    body.password,
-  );
-}
+  async login(
+    @Body() body: LoginDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const result = await this.authService.login(
+      body.email,
+      body.password,
+    );
+
+    response.cookie('access_token', result.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return {
+      message: 'Login successful',
+      user: result.user,
+    };
+  }
 }
