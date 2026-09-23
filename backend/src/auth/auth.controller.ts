@@ -67,10 +67,13 @@ export class AuthController {
             body.password,
         );
 
+        const isProduction =
+            (process.env.NODE_ENV || '').trim().replace(/^["']|["']$/g, '') === 'production';
+
         response.cookie('access_token', result.accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            secure: isProduction,
+            sameSite: isProduction ? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000,
         });
 
@@ -83,10 +86,13 @@ export class AuthController {
     // Logout
     @Post('logout')
     logout(@Res({ passthrough: true }) response: Response) {
+        const isProduction =
+            (process.env.NODE_ENV || '').trim().replace(/^["']|["']$/g, '') === 'production';
+
         response.clearCookie('access_token', {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            secure: isProduction,
+            sameSite: isProduction ? 'none' : 'lax',
         });
 
         return {

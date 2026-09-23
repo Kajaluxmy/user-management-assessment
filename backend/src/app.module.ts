@@ -11,7 +11,9 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
     }),
 
-    MongooseModule.forRoot(process.env.MONGO_URI as string),
+    MongooseModule.forRoot(
+      (process.env.MONGO_URI || '').trim().replace(/^["']|["']$/g, ''),
+    ),
 
     UsersModule,
     AuthModule,
