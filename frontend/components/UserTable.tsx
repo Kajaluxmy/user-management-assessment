@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Eye } from 'lucide-react';
 
 interface User {
   _id: string;
@@ -12,12 +12,10 @@ interface User {
 
 interface UserTableProps {
   users: User[];
-  onDelete: (id: string) => void;
 }
 
 export default function UserTable({
   users,
-  onDelete,
 }: UserTableProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -38,7 +36,7 @@ export default function UserTable({
               </th>
 
               <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Actions
+                Action
               </th>
             </tr>
           </thead>
@@ -70,24 +68,13 @@ export default function UserTable({
                 </td>
 
                 <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href={`/users/${user._id}/edit`}
-                      className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900"
-                    >
-                      <Pencil className="h-3.5 w-3.5" />
-                      Edit
-                    </Link>
-
-                    <button
-                      type="button"
-                      onClick={() => onDelete(user._id)}
-                      className="flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                      Delete
-                    </button>
-                  </div>
+                  <Link
+                    href={`/users/${user._id}`}
+                    className="flex w-fit items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900"
+                  >
+                    <Eye className="h-3.5 w-3.5" />
+                    View
+                  </Link>
                 </td>
               </tr>
             ))}
@@ -102,7 +89,7 @@ export default function UserTable({
           </p>
 
           <p className="mt-1 text-sm text-slate-400">
-            Create a user to see them listed here.
+            No registered users are available.
           </p>
         </div>
       )}

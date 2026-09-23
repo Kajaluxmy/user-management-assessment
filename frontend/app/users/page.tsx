@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { UserPlus, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 import Navbar from '@/components/Navbar';
 import UserTable from '@/components/UserTable';
 import {
-  deleteUser,
   getCurrentUser,
   getUsers,
 } from '@/lib/api';
@@ -52,64 +51,27 @@ export default function UsersPage() {
     loadUsers();
   }, []);
 
-  async function handleDelete(id: string) {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this user?',
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      setError('');
-
-      await deleteUser(id);
-
-      setUsers((currentUsers) =>
-        currentUsers.filter((user) => user._id !== id),
-      );
-    } catch (error: unknown) {
-      setError(
-        error instanceof Error
-          ? error.message
-          : 'Unable to delete user.',
-      );
-    }
-  }
-
   return (
     <main className="min-h-screen bg-slate-50">
       <Navbar />
 
       <div className="mx-auto max-w-6xl px-6 py-8">
-        <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-          <div>
-            <div className="mb-2 flex items-center gap-2">
-              <Users className="h-5 w-5 text-slate-500" />
+        <div className="mb-8">
+          <div className="mb-2 flex items-center gap-2">
+            <Users className="h-5 w-5 text-slate-500" />
 
-              <span className="text-sm font-medium text-slate-500">
-                User Management
-              </span>
-            </div>
-
-            <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
-              Users
-            </h1>
-
-            <p className="mt-1 text-sm text-slate-500">
-              Manage and view all registered users.
-            </p>
+            <span className="text-sm font-medium text-slate-500">
+              User Management
+            </span>
           </div>
 
-          <button
-            type="button"
-            onClick={() => router.push('/users/create')}
-            className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800"
-          >
-            <UserPlus className="h-4 w-4" />
-            Add User
-          </button>
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
+            Users
+          </h1>
+
+          <p className="mt-1 text-sm text-slate-500">
+            View all registered users.
+          </p>
         </div>
 
         {error && (
@@ -141,16 +103,8 @@ export default function UsersPage() {
             </h2>
 
             <p className="mt-1 text-sm text-slate-500">
-              Create your first user to get started.
+              There are no registered users yet.
             </p>
-
-            <button
-              type="button"
-              onClick={() => router.push('/users/create')}
-              className="mt-5 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800"
-            >
-              Create User
-            </button>
           </div>
         ) : (
           <div>
@@ -161,10 +115,7 @@ export default function UsersPage() {
               </p>
             </div>
 
-            <UserTable
-              users={users}
-              onDelete={handleDelete}
-            />
+            <UserTable users={users} />
           </div>
         )}
       </div>

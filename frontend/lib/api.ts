@@ -25,6 +25,8 @@ async function request<T>(
   return data;
 }
 
+// Authentication
+
 export function registerUser(data: {
   name: string;
   email: string;
@@ -56,6 +58,8 @@ export function getCurrentUser() {
   return request('/auth/me');
 }
 
+// Users
+
 export function getUsers() {
   return request('/users');
 }
@@ -64,33 +68,20 @@ export function getUser(id: string) {
   return request(`/users/${id}`);
 }
 
-export function createUser(data: {
-  name: string;
-  email: string;
-  password: string;
-}) {
-  return request('/users', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
-}
+// Own profile
 
-export function updateUser(
-  id: string,
-  data: {
-    name?: string;
-    email?: string;
-    password?: string;
-  },
-) {
-  return request(`/users/${id}`, {
+export function updateMyProfile(data: {
+  name?: string;
+  email?: string;
+}) {
+  return request('/users/me', {
     method: 'PATCH',
     body: JSON.stringify(data),
   });
 }
 
-export function deleteUser(id: string) {
-  return request(`/users/${id}`, {
+export function deleteMyAccount() {
+  return request('/users/me', {
     method: 'DELETE',
   });
 }
