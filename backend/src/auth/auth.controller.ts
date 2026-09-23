@@ -15,6 +15,15 @@ class RegisterDto {
   password: string;
 }
 
+class LoginDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(6)
+  password: string;
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -27,4 +36,12 @@ export class AuthController {
       body.password,
     );
   }
+
+  @Post('login')
+login(@Body() body: LoginDto) {
+  return this.authService.login(
+    body.email,
+    body.password,
+  );
+}
 }
