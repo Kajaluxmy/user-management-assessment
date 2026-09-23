@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# User Management Assessment
 
-## Getting Started
+A simple full-stack user management application developed as part of a Software Engineer Intern assessment.
 
-First, run the development server:
+The application provides user authentication and basic user management functionality using Next.js, NestJS, MongoDB, and JWT authentication.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Frontend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Backend
 
-## Learn More
+- NestJS
+- TypeScript
+- MongoDB
+- Mongoose
+- JWT
+- bcrypt
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Authentication
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- User registration
+- User login
+- Password hashing with bcrypt
+- JWT authentication
+- JWT stored in an HTTP-only cookie
+- User logout
+- Protected authenticated routes
 
-## Deploy on Vercel
+### User Management
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- View list of users
+- View a single user
+- Update own profile
+- Delete own account
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+```text
+user-management-assessment/
+│
+├── backend/
+│   ├── src/
+│   │   ├── auth/
+│   │   ├── users/
+│   │   ├── app.module.ts
+│   │   └── main.ts
+│   ├── .env
+│   └── package.json
+│
+├── frontend/
+│   ├── app/
+│   │   ├── login/
+│   │   ├── register/
+│   │   ├── users/
+│   │   └── profile/
+│   ├── components/
+│   ├── lib/
+│   └── package.json
+│
+├── README.md
+└── .gitignore
